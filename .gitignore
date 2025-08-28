@@ -85,3 +85,6 @@ next-env.d.ts
 .cache/
 .eslintcache
 .stylelintcache
+
+# Claude Code guidance file (local only)
+CLAUDE.md
