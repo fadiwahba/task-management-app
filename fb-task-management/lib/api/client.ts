@@ -2,7 +2,7 @@ import { Task, TaskInput, TaskFilters } from "@/types/task";
 
 const API_BASE_URL =
   process.env.NODE_ENV === "production"
-    ? `${process.env.NEXT_PUBLIC_APP_URL}/api`
+    ? "/api" // relative, works on Vercel domain
     : "http://localhost:3000/api";
 
 export class ApiError extends Error {
