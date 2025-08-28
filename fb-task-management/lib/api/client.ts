@@ -2,7 +2,7 @@ import { Task, TaskInput, TaskFilters } from "@/types/task";
 
 const API_BASE_URL =
   process.env.NODE_ENV === "production"
-    ? "https://your-production-api.com/api"
+    ? `${process.env.NEXT_PUBLIC_APP_URL}/api`
     : "http://localhost:3000/api";
 
 export class ApiError extends Error {
@@ -48,7 +48,9 @@ export const tasksApi = {
       searchParams.append("dueDate", filters.dueDate);
     }
 
-    const url = `${API_BASE_URL}/tasks${searchParams.toString() ? `?${searchParams.toString()}` : ""}`;
+    const url = `${API_BASE_URL}/tasks${
+      searchParams.toString() ? `?${searchParams.toString()}` : ""
+    }`;
     const response = await fetch(url);
     return handleResponse<Task[]>(response);
   },
