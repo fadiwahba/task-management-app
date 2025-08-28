@@ -1,0 +1,4 @@
+@import "tailwindcss";
+
+/* Import UI library styles - contains all pre-built classes */
+@import "fb-ui-library/css";

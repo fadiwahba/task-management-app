@@ -1,0 +1,33 @@
+{
+  "name": "fb-workspace",
+  "private": true,
+  "version": "0.0.0",
+  "description": "pnpm workspace containing UI library and task management application",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/your-org/fb-workspace"
+  },
+  "author": "fb",
+  "license": "MIT",
+  "scripts": {
+    "install:all": "pnpm install",
+    "build:all": "pnpm -r build",
+    "build:ui": "pnpm --filter fb-ui-library build",
+    "build:app": "pnpm --filter fb-task-management build",
+    "dev:ui": "pnpm --filter fb-ui-library dev",
+    "dev:app": "pnpm --filter fb-task-management dev",
+    "dev:setup": "pnpm --filter fb-ui-library build && pnpm --filter fb-task-management dev",
+    "dev:watch": "pnpm --filter fb-ui-library build:watch",
+    "test:all": "pnpm -r test",
+    "test:ui": "pnpm --filter fb-ui-library test",
+    "test:app": "pnpm --filter fb-task-management test",
+    "test:e2e": "pnpm --filter fb-task-management test:e2e",
+    "lint:all": "pnpm -r lint",
+    "lint:ui": "pnpm --filter fb-ui-library lint",
+    "lint:app": "pnpm --filter fb-task-management lint",
+    "clean:all": "pnpm -r clean",
+    "format:all": "pnpm -r format",
+    "storybook": "pnpm --filter fb-ui-library dev",
+    "build:storybook": "pnpm --filter fb-ui-library build:storybook"
+  }
+}
