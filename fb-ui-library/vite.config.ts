@@ -24,12 +24,17 @@ export default defineConfig({
     lib: {
       entry: resolve(__dirname, join('src', 'index.ts')),
       fileName: 'index',
-      cssFileName: 'style',
       formats: ['es', 'cjs'],
     },
     rollupOptions: {
       // Exclude peer dependencies from the bundle to reduce bundle size
       external: ['react/jsx-runtime', ...Object.keys(peerDependencies)],
+      output: {
+        assetFileNames: (assetInfo) => {
+          if (assetInfo.name === 'style.css') return 'style.css';
+          return assetInfo.name || '';
+        },
+      },
     },
   },
   test: {
