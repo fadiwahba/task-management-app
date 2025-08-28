@@ -10,6 +10,7 @@
   "author": "fb",
   "license": "MIT",
   "scripts": {
+    "build": "pnpm --filter fb-ui-library build && pnpm --filter fb-task-management build",
     "install:all": "pnpm install",
     "build:all": "pnpm -r build",
     "build:ui": "pnpm --filter fb-ui-library build",
