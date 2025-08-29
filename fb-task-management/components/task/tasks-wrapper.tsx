@@ -126,9 +126,9 @@ export default function TasksWrapper() {
         )}
 
         {/* Main Content */}
-        <div className="">
-          <Card className="shadow-xl mb-12">
-            <CardContent className="grid grid-cols-1 lg:grid-cols-6 gap-6">
+        <div>
+          <Card className="shadow-xl mb-12 p-8">
+            <CardContent className="grid grid-cols-1 lg:grid-cols-6 gap-8 p-0">
               {/* Filters Sidebar */}
               <aside className="lg:col-span-2" data-testid="task-filters-sidebar">
                 <TaskFiltersComponent

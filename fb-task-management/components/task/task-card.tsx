@@ -37,25 +37,25 @@ interface TaskCardProps {
 }
 
 const priorityConfig: Record<TaskPriority, { color: string; label: string }> = {
-  low: { color: "bg-green-100 text-green-800 border-green-200", label: "Low" },
+  low: { color: "bg-gray-100 rounded-full text-gray-500 border-gray-100", label: "Low" },
   medium: {
-    color: "bg-yellow-100 text-yellow-800 border-yellow-200",
+    color: "bg-gray-100 rounded-full text-gray-500 border-gray-100",
     label: "Medium",
   },
-  high: { color: "bg-red-100 text-red-800 border-red-200", label: "High" },
+  high: { color: "bg-gray-100 rounded-full text-gray-500 border-gray-100", label: "High" },
 };
 
 const statusConfig: Record<TaskStatus, { color: string; label: string }> = {
   pending: {
-    color: "bg-gray-100 text-gray-800 border-gray-200",
+    color: "bg-yellow-100 rounded-full text-yellow-800 border-yellow-200",
     label: "Pending",
   },
   "in progress": {
-    color: "bg-blue-100 text-blue-800 border-blue-200",
+    color: "bg-blue-100 rounded-full text-blue-800 border-blue-200",
     label: "In Progress",
   },
   completed: {
-    color: "bg-green-100 text-green-800 border-green-200",
+    color: "bg-green-100 rounded-full text-green-800 border-green-200",
     label: "Completed",
   },
 };
@@ -105,111 +105,128 @@ export function TaskCard({
   return (
     <Card
       className={cn(
-        "transition-shadow hover:shadow-lg",
         className,
-        task.status === "completed" &&
-          "opacity-75 bg-green-50 dark:bg-green-900"
+        "rounded-sm border-l-6 transition-all hover:shadow-lg hover:translate-y-[-4px]",
+        task.status === "completed" && "bg-gray-200 border-green-600",
+        task.status === "in progress" && " border-sky-600",
+        task.status === "pending" && " border-yellow-500"
       )}
       data-testid="task-card"
     >
-      <CardHeader className="pb-3">
+      <CardHeader>
         <div className="flex items-start justify-between gap-2">
           <CardTitle
             className={cn(
-              "text-lg leading-tight",
+              "text-lg md:text-xl leading-tight",
               task.status === "completed" && "line-through text-gray-500"
             )}
           >
             {task.title}
           </CardTitle>
 
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="ghost" size="sm" className="h-8 w-8 p-0" data-testid="task-menu-trigger">
-                <MoreHorizontal className="h-4 w-4" />
-                <span className="sr-only">Open menu</span>
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end" data-testid="task-menu-content">
-              <DropdownMenuItem onClick={() => onEdit?.(task)} data-testid="task-menu-edit">
-                <Edit className="mr-2 h-4 w-4" />
-                Edit
-              </DropdownMenuItem>
-              <AlertDialog
-                open={showDeleteDialog}
-                onOpenChange={setShowDeleteDialog}
-              >
-                <AlertDialogTrigger asChild>
-                  <DropdownMenuItem
-                    onSelect={(e) => {
-                      e.preventDefault();
-                      setShowDeleteDialog(true);
-                    }}
-                    className="text-red-600 focus:text-red-600"
-                    data-testid="task-menu-delete"
+          <div className="flex flex-col items-end md:flex-row md:items-center gap-2">
+            {/* badges */}
+            <div className="flex flex-col items-end md:flex-row md:items-center flex-wrap gap-2">
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Badge
+                    variant="outline"
+                    className={cn(
+                      statusConfig[task.status].color,
+                      "cursor-pointer hover:bg-opacity-80"
+                    )}
                   >
-                    <Trash2 className="mr-2 h-4 w-4" />
-                    Delete
+                    {statusConfig[task.status].label}
+                  </Badge>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent>
+                  <DropdownMenuItem
+                    onClick={() => handleStatusChange("pending")}
+                  >
+                    Pending
                   </DropdownMenuItem>
-                </AlertDialogTrigger>
-                <AlertDialogContent data-testid="delete-task-dialog">
-                  <AlertDialogHeader>
-                    <AlertDialogTitle>Delete Task</AlertDialogTitle>
-                    <AlertDialogDescription>
-                      Are you sure you want to delete &ldquo;{task.title}
-                      &rdquo;? This action cannot be undone.
-                    </AlertDialogDescription>
-                  </AlertDialogHeader>
-                  <AlertDialogFooter>
-                    <AlertDialogCancel data-testid="delete-cancel-button">Cancel</AlertDialogCancel>
-                    <AlertDialogAction
-                      onClick={handleDeleteConfirm}
-                      className="bg-red-600 hover:bg-red-700"
-                      data-testid="delete-confirm-button"
-                    >
-                      Delete
-                    </AlertDialogAction>
-                  </AlertDialogFooter>
-                </AlertDialogContent>
-              </AlertDialog>
-            </DropdownMenuContent>
-          </DropdownMenu>
-        </div>
-
-        <div className="flex flex-wrap gap-2">
-          <Badge
-            variant="outline"
-            className={priorityConfig[task.priority].color}
-          >
-            {priorityConfig[task.priority].label}
-          </Badge>
-
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
+                  <DropdownMenuItem
+                    onClick={() => handleStatusChange("in progress")}
+                  >
+                    In Progress
+                  </DropdownMenuItem>
+                  <DropdownMenuItem
+                    onClick={() => handleStatusChange("completed")}
+                  >
+                    Completed
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
               <Badge
                 variant="outline"
-                className={cn(
-                  statusConfig[task.status].color,
-                  "cursor-pointer hover:bg-opacity-80"
-                )}
+                className={priorityConfig[task.priority].color}
               >
-                {statusConfig[task.status].label}
+                {priorityConfig[task.priority].label}
               </Badge>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent>
-              <DropdownMenuItem onClick={() => handleStatusChange("pending")}>
-                Pending
-              </DropdownMenuItem>
-              <DropdownMenuItem
-                onClick={() => handleStatusChange("in progress")}
-              >
-                In Progress
-              </DropdownMenuItem>
-              <DropdownMenuItem onClick={() => handleStatusChange("completed")}>
-                Completed
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
+            </div>
+            {/* action menu */}
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className="h-8 w-8 p-0"
+                  data-testid="task-menu-trigger"
+                >
+                  <MoreHorizontal className="h-4 w-4" />
+                  <span className="sr-only">Open menu</span>
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" data-testid="task-menu-content">
+                <DropdownMenuItem
+                  onClick={() => onEdit?.(task)}
+                  data-testid="task-menu-edit"
+                >
+                  <Edit className="mr-2 h-4 w-4" />
+                  Edit
+                </DropdownMenuItem>
+                <AlertDialog
+                  open={showDeleteDialog}
+                  onOpenChange={setShowDeleteDialog}
+                >
+                  <AlertDialogTrigger asChild>
+                    <DropdownMenuItem
+                      onSelect={(e) => {
+                        e.preventDefault();
+                        setShowDeleteDialog(true);
+                      }}
+                      className="text-red-600 focus:text-red-600"
+                      data-testid="task-menu-delete"
+                    >
+                      <Trash2 className="mr-2 h-4 w-4" />
+                      Delete
+                    </DropdownMenuItem>
+                  </AlertDialogTrigger>
+                  <AlertDialogContent data-testid="delete-task-dialog">
+                    <AlertDialogHeader>
+                      <AlertDialogTitle>Delete Task</AlertDialogTitle>
+                      <AlertDialogDescription>
+                        Are you sure you want to delete &ldquo;{task.title}
+                        &rdquo;? This action cannot be undone.
+                      </AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <AlertDialogFooter>
+                      <AlertDialogCancel data-testid="delete-cancel-button">
+                        Cancel
+                      </AlertDialogCancel>
+                      <AlertDialogAction
+                        onClick={handleDeleteConfirm}
+                        className="bg-red-600 hover:bg-red-700"
+                        data-testid="delete-confirm-button"
+                      >
+                        Delete
+                      </AlertDialogAction>
+                    </AlertDialogFooter>
+                  </AlertDialogContent>
+                </AlertDialog>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </div>
         </div>
       </CardHeader>
 

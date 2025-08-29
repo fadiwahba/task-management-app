@@ -3,6 +3,9 @@
 
 @custom-variant dark (&:is(.dark *));
 
+/* Define CSS cascade layers - utilities will always override components */
+@layer base, components, utilities;
+
 @source './src';
 
 @theme inline {
